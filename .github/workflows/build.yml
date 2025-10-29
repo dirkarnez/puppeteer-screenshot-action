@@ -19,9 +19,9 @@ jobs:
         with:
           node-version: "20"
           
-      - run: npm install -g puppeteer
-
-      - uses: actions/github-script@v7.0.1
+      - run: npm install puppeteer
+      
+      - uses: actions/github-script@v8
         with:
           script: |
             const puppeteer = require('puppeteer');
