@@ -12,12 +12,12 @@ permissions:
 jobs:
   build:
     name: Create Release
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Setup NodeJS
         uses: actions/setup-node@v4.4.0
         with:
-          node-version: "20"
+          node-version: "20.x"
           
       - run: npm install puppeteer
       
@@ -27,9 +27,19 @@ jobs:
             const puppeteer = require('puppeteer');
             
             (async () => {
-              const browser = await puppeteer.launch();
+              const browser = await puppeteer.launch({
+                args: [
+                  // Required for Docker version of Puppeteer
+                  '--no-sandbox',
+                  '--disable-setuid-sandbox',
+                  // This will write shared memory files into /tmp instead of /dev/shm,
+                  // because Docker’s default for /dev/shm is 64MB
+                  '--disable-dev-shm-usage'
+                ]
+              });
+              
               const page = await browser.newPage();
-              await page.emulate(puppeteer.devices['iPhone 6']);
+              await page.emulate(puppeteer.devices['iPhone SE']);
               await page.goto('https://www.nytimes.com/');
               await page.screenshot({path: 'full.png', fullPage: true});
               await browser.close();
