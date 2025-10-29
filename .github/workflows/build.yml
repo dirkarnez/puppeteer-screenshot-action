@@ -39,7 +39,7 @@ jobs:
               });
               
               const page = await browser.newPage();
-              await page.emulate(puppeteer.devices['iPhone SE']);
+              await page.emulate(puppeteer.KnownDevices['iPhone SE']);
               await page.goto('https://www.nytimes.com/');
               await page.screenshot({path: 'full.png', fullPage: true});
               await browser.close();
